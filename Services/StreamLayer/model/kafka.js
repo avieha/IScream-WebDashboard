@@ -1,7 +1,8 @@
 const { KafkaConsumer } = require("node-rdkafka");
+require('dotenv').config({ path: require('find-config')('.env') })
 
 const topic = process.env.KAFKA_TOPIC;
-const kafkaConsumer = new KafkaConsumer(require("./kafka.config"));
+const kafkaConsumer = new KafkaConsumer(require("../../config/kafka.config"));
 
 kafkaConsumer
     .on("ready", (arg) => {
@@ -12,8 +13,7 @@ kafkaConsumer
         console.log(`Consumer ${arg.name} disconnected.`)
         kafkaConsumer.connect();
 })
-    .on("event.error", (err) => console.error(err));
-
-kafkaConsumer.connect();
+    .on("event.error", (err) => console.error(err))
+    .connect();
 
 module.exports = kafkaConsumer;

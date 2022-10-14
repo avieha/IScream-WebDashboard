@@ -33,4 +33,14 @@ const getCityById = (id) => {
   });
 };
 
-module.exports = { createSqlConnection, executeQuery, getCityById };
+const getCityByName = (cityName) => {
+  return new Promise((resolve, reject) => {
+    let query = `SELECT cityName FROM ice_scream_db.branches_info;`;
+    connection.query(query, (error, results, fields) => {
+      if (error) return reject({ error });
+      return resolve(results[0].cityName);
+    });
+  });
+};
+
+module.exports = { createSqlConnection, executeQuery, getCityById, getCityByName };

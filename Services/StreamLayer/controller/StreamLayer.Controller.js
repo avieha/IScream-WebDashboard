@@ -8,6 +8,7 @@ const reduceInventory = async (req, res) => {
     value[taste] -= quantity;
     db.set(cityName, JSON.stringify(value));
     res.status(200).send("approved");
+    console.log("ok");
   } catch (error) {
     res.status(400).send("error");
     console.log(error);
@@ -29,5 +30,5 @@ const addInventory = async (req, res) => {
 
 module.exports = {
   reduceInventory,
-  addInventory,
+  addInventory
 };

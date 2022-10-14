@@ -1,10 +1,17 @@
 const redis = require("redis");
+require('dotenv').config({ path: require('find-config')('.env') })
 let publisher;
 
 const createRedisConnection = () => {
   return new Promise((resolve, reject) => {
       if (publisher) return resolve();
-      publisher = redis.createClient();
+      publisher = redis.createClient({
+          socket: {
+              host: process.env.REDIS_URL,
+              port: process.env.REDIS_PORT
+          },
+          password: process.env.REDIS_PASSWORD
+      });
       publisher.connect();
       publisher.on("connect",  () => {
           console.log("redis is connected");

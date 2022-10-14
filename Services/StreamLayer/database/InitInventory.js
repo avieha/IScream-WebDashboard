@@ -15,8 +15,8 @@ mySql.createSqlConnection().then(() => {
   redis.createRedisConnection().then(async () => {
     let exist;
     try {
-      exist = await redis.exist("אשדוד");
-  
+      exist = await redis.exist("חיפה");
+
     } catch (err) {
       return console.log(err);
     }
