@@ -1,5 +1,12 @@
+const rookout = require('rookout') // Plugging rookout to view real time logs
 const mySql = require("../../BatchLayer/model/mySql");
 const redis = require("../../StreamLayer/model/redis");
+
+
+//for rookout
+rookout.start({
+  token: '784b2e2f966e134fa887d044d7d238c930d0e364a4ef5ea5108bb6f6abecc56f',labels:
+      {env: 'dev'}})
 
 const generatePurchase = async () => {
   let tastes, quantity, city;
