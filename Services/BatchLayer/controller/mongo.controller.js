@@ -1,18 +1,39 @@
 const mongo = require("../model/mongo");
+const MongoClient = require("mongodb").MongoClient;
 const mysql = require("../model/mySql");
-const getWeather = require("../webServices/getWeather");
-const getHoliday = require("../webServices/getHoliday");
-const parseSeason = require("../utils/parseSeason");
+const getWeather = require("../api/Weather");
+const getHoliday = require("../api/checkCalendar");
+const parseSeason = require("../api/parseSeason");
+require('dotenv').config({ path: require('find-config')('.env') })
+
+const dbName = "test",
+    collectionName = "Purchases";
+let mongoConnect;
+
+const createMongoConnection = () => {
+    return new Promise(async (resolve, reject) => {
+        const client = new MongoClient(process.env.MONGO_DB_URL);
+        client
+            .connect()
+            .then(() => {
+                console.log("mongo is connected");
+                mongoConnect = client.db(dbName).collection(collectionName);
+                return resolve();
+            })
+            .catch((err) => {
+                return reject(err);
+            });
+    });
+};
 
 const insertPurchase = async (req, res) => {
     let { cityName, taste, quantity, date } = req.body;
     try {
-        // let cityInfo = await mysql.getCityByName(data.cityName);
         let { cityType, toddlers, kids, adolescent, adults, middleAge, seniors } =
             await mysql.getCityByName(cityName);
-        let obj = {
-            taste,
-            quantity,
+        const newPurchase = new mongo({
+            taste: taste,
+            quantity: quantity,
             day: new Date(date).getDate(),
             month: new Date(date).getMonth() + 1,
             year: new Date(date).getFullYear(),
@@ -26,10 +47,10 @@ const insertPurchase = async (req, res) => {
             seniors,
             season: parseSeason(date),
             holiday: await getHoliday(date),
-            weather: await getWeather
-        };
-        return console.log(obj);
-        await mongo.insertPurchase(obj);
+            weather: getWeather(date)
+        });
+        console.log(newPurchase);
+        await insertOnePurchase(newPurchase);
         res.status(200).send("purchase inserted");
     } catch (error) {
         console.log(error);
@@ -38,27 +59,28 @@ const insertPurchase = async (req, res) => {
 };
 
 const getAllPurchases = async (req, res) => {
-    try {
-        const data = await mongo.getAllPurchases();
-        res.status(200).send(data);
-    } catch (error) {
-        console.log(error);
-        res.status(400).send("error fetching data");
-    }
+    mongo.find()
+        .then(purchases => {
+            res.status(200).json(purchases);
+        }).catch(error => {
+        res.status(500).json({
+            error
+        });
+    });
 };
 
-const deleteAllPurchases = async (req, res) => {
-    try {
-        await mongo.deleteAllPurchases();
-        res.status(200).send("delete OK");
-    } catch (error) {
-        console.log(error);
-        res.status(400).send("error deleting");
-    }
+const insertOnePurchase = (data) => {
+    return mongoConnect.insertOne(data);
 };
+
+const deleteAllPurchases = async () => {
+    mongo.deleteMany({});
+}
 
 module.exports = {
+    createMongoConnection,
     insertPurchase,
+    insertOnePurchase,
     getAllPurchases,
     deleteAllPurchases,
 };

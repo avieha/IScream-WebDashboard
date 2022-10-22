@@ -1,7 +1,7 @@
 const { KafkaConsumer } = require("node-rdkafka");
 require('dotenv').config({ path: require('find-config')('.env') })
 
-const topic = process.env.KAFKA_TOPIC;
+const topic = process.env.KAFKA_TOPIC_REDIS;
 const kafkaConsumer = new KafkaConsumer(require("../../config/kafka.config"));
 
 kafkaConsumer

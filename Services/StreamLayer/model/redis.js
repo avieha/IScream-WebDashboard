@@ -34,11 +34,19 @@ const exist = (cityName) => {
 }
 
 const set = (cityName,value) => {
-    return publisher.set(cityName,value)
+    return new Promise((resolve, reject) => {
+        publisher
+            .set(cityName, value)
+            .then((res) => {
+                return resolve (res)
+            })
+            .catch((err) => {
+                return reject(err);
+            });
+    });
 }
 
 const get = (cityName) => {
-    // return publisher.get(cityName)
     return new Promise((resolve,reject) => {
         publisher.get(cityName).then((res) => {
             return resolve(JSON.parse(res))

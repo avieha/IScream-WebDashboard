@@ -1,10 +1,7 @@
 const mongoose = require('mongoose');
 require('dotenv').config({ path: require('find-config')('.env') })
 
-mongoose.connect(process.env.MONGO_DB_URL);
-
-const Schema = mongoose.Schema;
-const ObjectId = Schema.ObjectId;
+// mongoose.connect(process.env.MONGO_DB_URL);
 
 const PurchaseSchema = mongoose.Schema({
 
@@ -17,13 +14,13 @@ const PurchaseSchema = mongoose.Schema({
             type: Number,
         },
         day: {
-            type: Date,
+            type: Number,
         },
         month: {
-            type: Date,
+            type: Number,
         },
         year: {
-            type: Date,
+            type: Number,
         },
         cityName: {
             type: String,
@@ -62,11 +59,11 @@ const PurchaseSchema = mongoose.Schema({
     },
 );
 
-const db = mongoose.connection;
+// const db = mongoose.connection;
 
-db.on("error", console.error.bind(console, "connection error:"));
-db.once("open", function () {
-    console.log("Connected to MongoDB");
-});
+// db.on("error", console.error.bind(console, "connection error:"));
+// db.once("open", function () {
+//     console.log("Connected to MongoDB");
+// });
 
 module.exports = mongoose.model('Purchases', PurchaseSchema);
