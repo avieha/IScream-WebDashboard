@@ -1,6 +1,4 @@
-import NavBar from '../components/NavBar'
 import BestBook from '../components/BestBook'
-import NewItem from './NewItem'
 import {createTheme, ThemeProvider} from '@mui/material/styles';
 import React from "react";
 import CssBaseline from '@mui/material/CssBaseline';
@@ -19,7 +17,7 @@ function Home() {
     return (
         <ThemeProvider theme={theme}>
             <CssBaseline/>
-            <NavBar/>
+            {/*<NavBar/>*/}
             <BestBook/>
         </ThemeProvider>
     )

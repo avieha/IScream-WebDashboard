@@ -1,26 +1,22 @@
 const db = require("../model/redis");
 const mySql = require("../../BatchLayer/model/mySql");
 
-const reduceInventory = async (cityName, taste, quantity) => {
-  return new Promise(async (resolve, reject) => {
-    await db.get(cityName)
-        .then(async (res) => {
-          res[taste] -= +quantity;
-          await db.set(cityName, JSON.stringify(res));
-          console.log(res);
-          console.log("Inventory updated");
-          return resolve(res);
-        })
-        .catch((err) => {
-          return reject(err);
-        });
-  });
+const reduceInventory = async (req, res) => {
+  const { cityName , taste , quantity } = req.body;
+  try {
+    const value = await db.get(cityName);
+    value[taste] -= quantity;
+    await db.set(cityName, JSON.stringify(value));
+    res.status(200).send("approved");
+  } catch (error) {
+    res.status(400).send("error");
+    console.log(error);
+  }
 };
 
 const addInventory = async (req, res) => {
   const { cityName , taste , quantity } = req.body;
   try {
-    await db.createRedisConnection(); // check if we need to delete this line
     const value = await db.get(cityName);
     value[taste] += quantity;
     await db.set(cityName, JSON.stringify(value));
@@ -65,11 +61,20 @@ const getAllInventory = async (req, res) => {
       totalLemon: Lemon,
       totalHalvah: Halvah,
     };
-    res.status(200).send(obj);
+
+    console.log(obj);
+    res.status(200).json(obj);
   } catch (error) {
     res.status(400).send("error");
     console.log(error);
   }
+};
+
+const getTastes = async (req, res) => {
+  const value = await db.get("אשדוד");
+  const tastes = Object.keys(value);
+  if (tastes) res.status(200).send(tastes);
+  else res.status(400).send("error");
 };
 
 module.exports = {
@@ -77,4 +82,5 @@ module.exports = {
   addInventory,
   getBranchInventory,
   getAllInventory,
+  getTastes
 };

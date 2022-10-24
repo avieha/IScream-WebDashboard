@@ -23,7 +23,8 @@ app
     .put("/api/reduceInventory", controller.reduceInventory)
     .put("/api/addInventory", controller.addInventory)
     .get("/api/getBranchInventory", controller.getBranchInventory)
-    .get("/api/getAllInventory", controller.getAllInventory);
+    .get("/api/getAllInventory", controller.getAllInventory)
+    .get("/api/getTastes", controller.getTastes);
 
 // io.on("connection", async (client) => {
 //     console.log("Client connected to socket");
