@@ -1,7 +1,7 @@
 const db = require("../model/redis");
 const mySql = require("../../BatchLayer/model/mySql");
 
-const reduceInventory = async (req, res) => {
+const reduceQuantity = async (req, res) => {
   const { cityName , taste , quantity } = req.body;
   try {
     const value = await db.get(cityName);
@@ -14,7 +14,7 @@ const reduceInventory = async (req, res) => {
   }
 };
 
-const addInventory = async (req, res) => {
+const addQuantity = async (req, res) => {
   const { cityName , taste , quantity } = req.body;
   try {
     const value = await db.get(cityName);
@@ -27,7 +27,7 @@ const addInventory = async (req, res) => {
   }
 };
 
-const getBranchInventory = async (req, res) => {
+const getBranchQuantity = async (req, res) => {
   let { cityName } = req.body;
   try {
     const value = await db.get(cityName);
@@ -39,7 +39,7 @@ const getBranchInventory = async (req, res) => {
   }
 };
 
-const getAllInventory = async (req, res) => {
+const getAllQuantity = async (req, res) => {
   let branches;
   let Chocolate = 0,Vanilla = 0,Strawberry = 0,Lemon = 0, Halvah = 0
   let sql = `SELECT cityName FROM ice_scream_db.branches_info;`;
@@ -78,9 +78,9 @@ const getTastes = async (req, res) => {
 };
 
 module.exports = {
-  reduceInventory,
-  addInventory,
-  getBranchInventory,
-  getAllInventory,
+  reduceQuantity,
+  addQuantity,
+  getBranchQuantity,
+  getAllQuantity,
   getTastes
 };

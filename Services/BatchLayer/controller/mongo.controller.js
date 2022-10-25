@@ -47,7 +47,7 @@ const insertPurchase = async (req, res) => {
             seniors,
             season: parseSeason(date),
             holiday: await getHoliday(date),
-            weather: getWeather(date)
+            weather: getWeather(date, cityName)
         });
         console.log(newPurchase);
         await insertOnePurchase(newPurchase);

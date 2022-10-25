@@ -36,6 +36,7 @@ app
 
     .post("/api/insertPurchase", mongoController.insertPurchase)
     .get("/api/getAllPurchases", mongoController.getAllPurchases)
+    .get("/api/getWeather", getWeather.getweather)
     .delete("/api/deleteAllPurchases", mongoController.deleteAllPurchases);
 
 app.get("/api/getCitiesList", mySql.getCitiesList);
@@ -69,7 +70,7 @@ kafkaConsumer.on("data", async function (message) {
             seniors,
             season: parseSeason(date),
             holiday: await getHoliday(date),
-            weather: await getWeather(date),
+            weather: await getWeather(date, cityName),
         };
 
         const Purchase = new mongoose.purchaseModel(obj);

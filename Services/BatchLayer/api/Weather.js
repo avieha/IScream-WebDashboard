@@ -1,112 +1,89 @@
-// const axios = require("axios").default;
-// require('dotenv').config({ path: require('find-config')('.env') })
-//
-// // const getweather = (date) => {
-// //     let fromDate = "2022-08-10" // new Date(date);
-// //     let toDate = "2022-09-10" // new Date(date);
-//     // toDate.setDate(toDate.getDate() - 7);
-//
-//     // fromDate = fromDate.toLocaleDateString("en-CA");
-//     // toDate = toDate.toLocaleDateString("en-CA");
-//     // let arr = [];
-//     console.log("here")
-//     return new Promise((resolve, reject) => {
-//         let arr = [];
-//         console.log("I'm here");
-//         let fromDate = '2022-05-09' // new Date(date);
-//         let toDate = '2022-09-10' // new Date(date);
-//         let cityName = 'Ashdod';
-//
-//         axios.get(
-//                 `https://api.weatherbit.io/v2.0/history/daily?city=${cityName}&country=IL
-//                 &state=Israel&start_date=${fromDate}&end_date=${toDate}&key=${process.env.WEATHER_API_KEY}`
-//             )
-//             .then(async function (res) {
-//                 const wdates = res.data.data[0].temp;
-//                 if (wdates < 20) {
-//                     console.log("cold")
-//                 }
-//                 else {
-//                     console.log("hot")
-//                 }
-//                 console.log(wdates);
-//                 return wdates;
-//                 // const eventsArr = Object.entries(wdates);
-//                 // eventsArr.forEach((wd) => {
-//
-//                     // return wd[1].events.forEach((event) => {
-//                     //
-//                     //     if(event.split(' ')[0] !=="Parashat"){
-//                     //         return arr.push(event);
-//                     //     }
-//                     // })
-//                 });
-//
-//
-//             //     if(arr[0]) return resolve(true)
-//             //     return resolve(false);
-//             // })
-//             // .catch((error) => {
-//             //     console.log(error);
-//             //     reject(error);
-//             // });
-//     });
-// // };
-//
-// // module.exports = {
-// //     getweather
-// // };
+const axios = require("axios").default;
+require('dotenv').config({ path: require('find-config')('.env') })
 
+module.exports = (date, cityName) => {
+    let isForcast = false;
+    let today = new Date().toISOString().split('T')[0];
+    today = new Date(today);
+    let fromDate = new Date(date);
+    let toDate = new Date(date);
+    let temperature;
+    cityName = encodeURI(cityName);
 
+    // To calculate the time difference of two dates
+    let Difference_In_Time = fromDate.getTime() - today.getTime();
 
-module.exports = (date) => {
-    let dateObj = new Date(date)
-    let r = Math.floor(Math.random() * 100) + 1;
+    // To calculate the no. of days between two dates
+    let Difference_In_Days = Math.ceil(Difference_In_Time / (1000 * 3600 * 24));
 
-    switch(dateObj.getMonth()){
-
-        case 11:
-        case 0:
-        case 1:
-            if(r>=60)
-                return "קר מאוד"
-            else if(r<60 && r>=50)
-                return "נעים"
-            else
-                return "קר"
-
-        case 2:
-        case 3:
-        case 4:
-            if(r>=70)
-                return "חם"
-            else if(r<70 && r>=50)
-                return "קר"
-            else
-                return "נעים"
-        case 5:
-        case 6:
-        case 7:
-            if(r>=60)
-                return "חם מאוד"
-            else if(r<60 && r>=50)
-                return "נעים"
-            else
-                return "חם"
-
-
-        case 8:
-        case 9:
-        case 10:
-            if(r>=70)
-                return "קר"
-            else if(r<70 && r>=50)
-                return "חם"
-            else
-                return "נעים"
-
-
-        default:
-            break;
+    if (today.getTime() <= fromDate.getTime()) {
+        isForcast = true;
+        toDate.setDate(toDate.getDate() + Difference_In_Days);
+    } else if (today.getTime() === fromDate.getTime()) {
+        isForcast = true;
+        Difference_In_Days = 0;
+    } else {
+        toDate.setDate(toDate.getDate() + 1);
     }
+
+    fromDate = fromDate.toLocaleDateString("en-CA");
+    toDate = toDate.toLocaleDateString("en-CA");
+
+    return new Promise((resolve, reject) => {
+        // if date is today:
+        // go to this axios:
+        if (isForcast) {
+            axios.get(`https://api.weatherbit.io/v2.0/forecast/daily?city=${cityName}&country=IL
+        // &state=Israel&days=16&key=${process.env.WEATHER_API_KEY}`
+            ).then(async function (resultforcast) {
+                temperature = resultforcast.data.data[Difference_In_Days].temp;
+                if (temperature >= 30) {
+                    return resolve("חם מאוד");
+                }
+                else if (temperature >= 25 && temperature < 30){
+                    return resolve("חם");
+                }
+                else if (temperature > 20 && temperature < 25){
+                    return resolve("נעים");
+                }
+                else if (temperature > 15 && temperature <= 20) {
+                    return resolve("קר");
+                }
+                else {
+                    return resolve("קר מאוד");
+                }
+            }).catch((error) => {
+                console.log(error);
+                reject(error);
+            });
+        }
+        else {
+            // if we want a date before this date go to this axios:
+            axios.get(
+                `https://api.weatherbit.io/v2.0/history/daily?city=${cityName}&country=IL
+                &state=Israel&start_date=${fromDate}&end_date=${toDate}&key=${process.env.WEATHER_API_KEY}`
+            )
+                .then(async function (result) {
+                    temperature = result.data.data[Difference_In_Days].temp;
+                    if (temperature >= 30) {
+                        return resolve("חם מאוד");
+                    }
+                    else if (temperature >= 25 && temperature < 30){
+                        return resolve("חם");
+                    }
+                    else if (temperature > 20 && temperature < 25){
+                        return resolve("נעים");
+                    }
+                    else if (temperature > 15 && temperature <= 20) {
+                        return resolve("קר");
+                    }
+                    else {
+                        return resolve("קר מאוד");
+                    }
+                }).catch((error) => {
+                console.log(error);
+                reject(error);
+            });
+        }
+    })
 }
