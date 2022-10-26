@@ -1,7 +1,9 @@
 {
   "dependencies": {
+    "@material-ui/core": "^4.12.4",
     "axios": "^0.27.2",
     "bluebird": "^3.7.2",
+    "chart.js": "^3.9.1",
     "concurrently": "^7.4.0",
     "cors": "^2.8.5",
     "decision-tree": "^0.3.7",
@@ -14,6 +16,8 @@
     "node-rdkafka": "^2.13.0",
     "nodemon": "^2.0.20",
     "random-names-hebrew": "^0.0.20",
+    "react-chart.js": "^1.0.0",
+    "react-chartjs-2": "^4.3.1",
     "redis": "^4.3.1",
     "unique-names-generator": "^4.7.1",
     "uuid": "^9.0.0"
@@ -26,8 +30,8 @@
     "start:BatchLayer": "node Services/BatchLayer/index.js ",
     "start:StreamLayer": "node Services/StreamLayer/index.js ",
     "start:MessageBroker": "node Services/MessageBroker/index.js ",
-    "start": "concurrently  npm:start:*",
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "concurrently \"npm:start:*\" \"cd client2 && npm start\"",
+    "test": "echo \"Error: no test specified\"  && exit 1",
     "run": "node index"
   },
   "keywords": [],
