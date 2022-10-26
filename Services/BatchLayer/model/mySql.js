@@ -47,11 +47,12 @@ const getCityByName = (cityName) => {
 
 const getAllCities = () => {
   return new Promise((resolve, reject) => {
-    let query = `SELECT cityName FROM ice_scream_db.branches_info;`;
-    connection.query(query, (error, results, fields) => {
-      if (error) return reject({ error });
-      return resolve(results);
-    });
+    let query =`SELECT cityName FROM ice_scream_db.branches_info;`;
+    executeQuery(query);
+    // connection.query(query, (error, results, fields) => {
+    //   if (error) return reject({ error });
+    //   return resolve(results);
+    // });
   });
 }
 
@@ -67,4 +68,4 @@ const getCitiesList = async (req, res) => {
   }
 };
 
-module.exports = { createSqlConnection , executeQuery, getCityById, getCityByName, getCitiesList };
+module.exports = { createSqlConnection , executeQuery, getCityById, getCityByName, getCitiesList, getAllCities };

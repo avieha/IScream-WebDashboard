@@ -12,7 +12,7 @@ export default function Flavors() {
 
     const parseData = (data) => {
         const entries = Object.entries(data);
-
+        console.log("ENTRIES:",entries)
         setFlavors({
             labels: entries.map((entry) => entry[0]),
             datasets: [{
@@ -38,8 +38,9 @@ export default function Flavors() {
     };
 
     useEffect(() => {
-        axios.get('http://localhost:3001/flavors')
+        axios.get('http://localhost:3002/api/getAllQuantity')
             .then(res => {
+                console.log(res.data)
                 parseData(res.data);
             });
     }, []);

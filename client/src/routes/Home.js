@@ -1,4 +1,4 @@
-import BestBook from '../components/BestBook'
+import BestBook from './Dashboard'
 import {createTheme, ThemeProvider} from '@mui/material/styles';
 import React from "react";
 import CssBaseline from '@mui/material/CssBaseline';
