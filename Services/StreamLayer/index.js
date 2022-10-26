@@ -1,16 +1,28 @@
 const express = require("express");
 const cors = require("cors");
+const http = require('http')
+const Server = require("socket.io").Server;
+const app = express();
+
+app.use(cors());
+
 require('dotenv').config({ path: require('find-config')('.env') })
+
 const controller = require("./controller/StreamLayer.Controller");
 const kafkaConsumer = require("./model/Kafka");
 const db = require("./model/redis");
 const { createSqlConnection } = require("../BatchLayer/model/mySql");
 
-const app = express();
+const server = http.createServer(app);
+const io = new Server(server, {
+    cors: {
+        origin: '*',
+        methods: ['GET', 'POST']
+    }
+});
 
 /* Middlewares */
-app.use(express.json());
-app.use(cors());
+
 
 app
     .get("/", (req, res) => {
@@ -35,16 +47,27 @@ app
 //     }
 // });
 
+io.on('connection', async (socket) => {
+    console.log('a user connected');
+    try {
+        let redis_data = await db.createRedisConnection();
+        io.emit("connected redis", redis_data);
+        console.log("redis: ", redis_data);
+    } catch (error) {
+        console.log(error);
+    }
+});
+
 kafkaConsumer.on("data", async (message) => {
     console.log("got data");
     const buffer = Buffer.from(message.value);
     const bufferObject = JSON.parse(buffer.toString());
-
+    let redis_data = await db.createRedisConnection();
     let { cityName, taste, quantity } = bufferObject;
     try {
         await controller.reduceQuantity(cityName,taste,quantity);
-        //   io.emit("calls", calls_data);
-        //   io.emit("last_call", new_Call);
+        io.emit("connected redis", redis_data);
+        io.emit("reduce", bufferObject);
     } catch (error) {
         console.log(error);
     }
@@ -52,7 +75,7 @@ kafkaConsumer.on("data", async (message) => {
 
 /* Start server */
 const PORT = process.env.PORT || 3002;
-app.listen(PORT, () =>
+server.listen(PORT, () =>
     console.log(`StreamLayer listening at http://localhost:${PORT}`)
 );
 

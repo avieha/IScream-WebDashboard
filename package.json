@@ -15,6 +15,7 @@
     "nodemon": "^2.0.20",
     "random-names-hebrew": "^0.0.20",
     "redis": "^4.3.1",
+    "socket.io": "^4.5.3",
     "unique-names-generator": "^4.7.1",
     "uuid": "^9.0.0"
   },
