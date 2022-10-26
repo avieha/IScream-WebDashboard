@@ -36,7 +36,7 @@ app
 
     .post("/api/insertPurchase", mongoController.insertPurchase)
     .get("/api/getAllPurchases", mongoController.getAllPurchases)
-    .get("/api/getWeather", getWeather.getweather)
+    .get("/api/getWeather", getWeather)
     .delete("/api/deleteAllPurchases", mongoController.deleteAllPurchases);
 
 app.get("/api/getCitiesList", mySql.getCitiesList);
