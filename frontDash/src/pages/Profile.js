@@ -3,10 +3,12 @@ import {CDBBtn, CDBContainer, CDBIframe, CDBView} from "cdbreact";
 import Sidebar from "../Sidebar";
 import Navbar from "../Navbar";
 
-import getWeather from "../Weather";
+// import getWeather from "../../../Services/BatchLayer/api/Weather";
 import "./Profile.css"
 
 export const Profile = () => {
+
+    // document.getElementById("header").innerHTML = getWeather(Date.now(),"ירושלים");
 
     return (
         <div className="d-flex profile">
@@ -37,6 +39,7 @@ export const Profile = () => {
                                                 <div className="mt-3 d-flex justify-content-between">
                                                     <CDBContainer style={{width: "350px", height: "300px"}}
                                                                   className="p-0">
+                                                        <h5 id="header">Hello</h5>
                                                     </CDBContainer>
                                                 </div>
                                             </div>
