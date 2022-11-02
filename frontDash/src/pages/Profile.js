@@ -39,7 +39,7 @@ export const Profile = () => {
                                                 <div className="mt-3 d-flex justify-content-between">
                                                     <CDBContainer style={{width: "350px", height: "300px"}}
                                                                   className="p-0">
-                                                        <h5 id="header">Hello</h5>
+                                                        <h5 id="header">The predicted consumption for $branch is $$</h5>
                                                     </CDBContainer>
                                                 </div>
                                             </div>

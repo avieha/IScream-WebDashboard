@@ -84,7 +84,7 @@ export const Tables = () => {
                     <div style={{height: "calc(100% - 64px)", overflowY: "scroll"}}>
                         <div className="d-flex card-section">
                             <div className="cards-container">
-                                <div className="card-bg w-100 border d-flex flex-column">
+                                <div className="card-bg w-200 border d-flex flex-column">
                                     <div className="p-4 d-flex flex-column h-100">
                                         <div className="d-flex align-items-center justify-content-between">
                                             <h4 className="m-0 h5 font-weight-bold text-dark">:טעמים</h4>
@@ -96,7 +96,7 @@ export const Tables = () => {
                                                     <Dropdown.Toggle variant="success" id="dropdown-basic">
                                                         {selectedBranch.name}
                                                     </Dropdown.Toggle>
-                                                    <Dropdown.Menu>
+                                                    <Dropdown.Menu style={{color:"#1a60cb"}}>
                                                         {branches.map((branch) => (
                                                             <Dropdown.Item
                                                                 key={branch.id}
@@ -107,7 +107,7 @@ export const Tables = () => {
                                                         ))}
                                                     </Dropdown.Menu>
                                                 </Dropdown>
-                                                <div style={{height: '500px'}}>
+                                                <div style={{height: '500px',color:"#1a60cb"}}>
                                                     <Line data={chartData} options={chartOptions}/>
                                                 </div>
                                             </CDBContainer>
@@ -122,7 +122,7 @@ export const Tables = () => {
                                     fontSize: "3em",
                                     margin: "-2rem 0px -1.5rem 1rem",
                                     color: "#1a60cb"
-                                }}>&#1a60cb;</span>
+                                }}></span>
                                 <small className="ml-2 mt-1">&copy; Powered By Asif Rot, Gal Braymok, Aviem
                                     Hadar.</small>
                             </div>
